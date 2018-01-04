@@ -1,6 +1,6 @@
 (ns aoc-2017.day-01)
 
-(def input "1122")
+(def input (-> "inputs/day_01" slurp clojure.string/trim))
 
 (defn str->digits
   [s]
