@@ -9,11 +9,26 @@
 
 (def data (str->digits input))
 
-(defn solve []
-  (->> data                   ;   (1 1 2 2)
-       (cons (last data))     ; (2 1 1 2 2)
-       (partition 2 1)        ; ((2 1) (1 1) (1 2) (2 2))
-       (filter #(apply = %))  ; ((1 1) (2 2))
-       (map first)            ; (1 2)
-       (reduce +)))           ; 3
+(defn pair-next
+  [coll]
+  (->> coll
+       (cons (last coll))
+       (partition 2 1)))
 
+(defn pair-halfway
+  [coll]
+  (let [offset (-> coll count (/ 2))]
+    (->>
+      (-> coll cycle (nthrest offset))
+      (mapv list coll))))
+
+(defn solve
+  [make-pairs]
+  (->> data
+       (make-pairs)
+       (filter #(apply = %))
+       (map first)
+       (reduce +)))
+
+(println "Solution part 1:" (solve pair-next))
+(println "Solution part 2:" (solve pair-halfway))
